@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block main %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog text-dark" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>
+                <div>Sex: <span id="sx"></span></div>
+                <div>Education: <span id="ed"></span></div>
+                <div>Marriage: <span id="mr"></span></div>
+                <div>Repayment Status in September, 2005: <span id="p1"></span></div>
+                <div>Repayment Status in August, 2005: <span id="p2"></span></div>
+                <div>Repayment Status in July, 2005: <span id="p3"></span></div>
+                <div>Repayment Status in June, 2005: <span id="p4"></span></div>
+                <div>Repayment Status in May, 2005: <span id="p5"></span></div>
+                <div>Repayment Status in April, 2005: <span id="p6"></span></div>
+                <div>Amount of bill statement in September, 2005: <span id="ba1"></span></div>
+                <div>Amount of bill statement in August, 2005: <span id="ba2"></span></div>
+                <div>Amount of bill statement in July, 2005: <span id="ba3"></span></div>
+                <div>Amount of bill statement in June, 2005: <span id="ba4"></span></div>
+                <div>Amount of bill statement in May, 2005: <span id="ba5"></span></div>
+                <div>Amount of bill statement in April, 2005: <span id="ba6"></span></div>
+                <div>Amount of previous payment in September, 2005: <span id="pa1"></span></div>
+                <div>Amount of previous payment in August, 2005: <span id="pa2"></span></div>
+                <div>Amount of previous payment in July, 2005: <span id="pa3"></span></div>
+                <div>Amount of previous payment in June, 2005: <span id="pa4"></span></div>
+                <div>Amount of previous payment in May, 2005: <span id="pa5"></span></div>
+                <div>Amount of previous payment in April, 2005: <span id="pa6"></span></div>
+                <div>Age: <span id="ag"></span></div>
+                <div>Limit Bal: <span id="lb"></span></div>
+                <h5 class="pt-3">Prediction Classification:</h5>
+                <div id="prediction"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="/results" role="button">View DB</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+            <h1>Default Credit Card Clients Prediction</h1>
+            <form action="" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="sex">Sex</label>
+                    <select id="sex" class="form-control" required>
+                        <option value="1" label="Male">Male</option>
+                        <option value="2" label="Female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <select id="education" class="form-control" required>
+                        <option value="1">Graduate School</option>
+                        <option value="2">University</option>
+                        <option value="3">High School</option>
+                        <option value="4">Others</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="marriage">Marriage</label>
+                    <select id="marriage" class="form-control" required>
+                        <option value="1">Married</option>
+                        <option value="2">Single</option>
+                        <option value="3">Others</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pay_1">Repayment Status in September, 2005</label>
+                    <select id="pay_1" class="form-control" required>
+                        <option value="-2">No consumption</option>
+                        <option value="-1">Paid in full</option>
+                        <option value="0">The use of revolving credit</option>
+                        <option value="1">Payment delay for one month</option>
+                        <option value="2">Payment delay for two months</option>
+                        <option value="3">Payment delay for three months</option>
+                        <option value="4">Payment delay for four months</option>
+                        <option value="5">Payment delay for five months</option>
+                        <option value="6">Payment delay for six months</option>
+                        <option value="7">Payment delay for seven months</option>
+                        <option value="8">Payment delay for eight months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pay_2">Repayment Status in August, 2005</label>
+                    <select id="pay_2" class="form-control" required>
+                        <option value="-2">No consumption</option>
+                        <option value="-1">Paid in full</option>
+                        <option value="0">The use of revolving credit</option>
+                        <option value="1">Payment delay for one month</option>
+                        <option value="2">Payment delay for two months</option>
+                        <option value="3">Payment delay for three months</option>
+                        <option value="4">Payment delay for four months</option>
+                        <option value="5">Payment delay for five months</option>
+                        <option value="6">Payment delay for six months</option>
+                        <option value="7">Payment delay for seven months</option>
+                        <option value="8">Payment delay for eight months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pay_3">Repayment Status in July, 2005</label>
+                    <select id="pay_3" class="form-control" required>
+                        <option value="-2">No consumption</option>
+                        <option value="-1">Paid in full</option>
+                        <option value="0">The use of revolving credit</option>
+                        <option value="1">Payment delay for one month</option>
+                        <option value="2">Payment delay for two months</option>
+                        <option value="3">Payment delay for three months</option>
+                        <option value="4">Payment delay for four months</option>
+                        <option value="5">Payment delay for five months</option>
+                        <option value="6">Payment delay for six months</option>
+                        <option value="7">Payment delay for seven months</option>
+                        <option value="8">Payment delay for eight months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pay_4">Repayment Status in June, 2005</label>
+                    <select id="pay_4" class="form-control" required>
+                        <option value="-2">No consumption</option>
+                        <option value="-1">Paid in full</option>
+                        <option value="0">The use of revolving credit</option>
+                        <option value="1">Payment delay for one month</option>
+                        <option value="2">Payment delay for two months</option>
+                        <option value="3">Payment delay for three months</option>
+                        <option value="4">Payment delay for four months</option>
+                        <option value="5">Payment delay for five months</option>
+                        <option value="6">Payment delay for six months</option>
+                        <option value="7">Payment delay for seven months</option>
+                        <option value="8">Payment delay for eight months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pay_5">Repayment Status in May, 2005</label>
+                    <select id="pay_5" class="form-control" required>
+                        <option value="-2">No consumption</option>
+                        <option value="-1">Paid in full</option>
+                        <option value="0">The use of revolving credit</option>
+                        <option value="1">Payment delay for one month</option>
+                        <option value="2">Payment delay for two months</option>
+                        <option value="3">Payment delay for three months</option>
+                        <option value="4">Payment delay for four months</option>
+                        <option value="5">Payment delay for five months</option>
+                        <option value="6">Payment delay for six months</option>
+                        <option value="7">Payment delay for seven months</option>
+                        <option value="8">Payment delay for eight months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pay_6">Repayment Status in April, 2005</label>
+                    <select id="pay_6" class="form-control" required>
+                        <option value="-2">No consumption</option>
+                        <option value="-1">Paid in full</option>
+                        <option value="0">The use of revolving credit</option>
+                        <option value="1">Payment delay for one month</option>
+                        <option value="2">Payment delay for two months</option>
+                        <option value="3">Payment delay for three months</option>
+                        <option value="4">Payment delay for four months</option>
+                        <option value="5">Payment delay for five months</option>
+                        <option value="6">Payment delay for six months</option>
+                        <option value="7">Payment delay for seven months</option>
+                        <option value="8">Payment delay for eight months</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bill_amt1">Amount of bill statement in September, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="bill_amt1" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="bill_amt2">Amount of bill statement in August, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="bill_amt2" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="bill_amt3">Amount of bill statement in July, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="bill_amt3" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="bill_amt4">Amount of bill statement in June, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="bill_amt4" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="bill_amt5">Amount of bill statement in May, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="bill_amt5" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="bill_amt6">Amount of bill statement in April, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="bill_amt6" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="pay_amt1">Amount of previous payment in September, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="pay_amt1" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="pay_amt2">Amount of previous payment in August, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="pay_amt2" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="pay_amt3">Amount of previous payment in July, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="pay_amt3" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="pay_amt4">Amount of previous payment in June, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="pay_amt4" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="pay_amt5">Amount of previous payment in May, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="pay_amt5" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="pay_amt6">Amount of previous payment in April, 2005</label>
+                    <input type="number" step="1" value="0.0" min="0.0" class="form-control" id="pay_amt6" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" step="1" value="20" min="20" max="50" class="form-control" id="age" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="limit_bal">Limit Bal</label>
+                    <input type="number" step="1" value="5000" min="0" class="form-control" id="limit_bal" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "predict:submit_prediction" %}',
+            data:{
+                limit_bal:$('#limit_bal').val(),
+                sex:$('#sex').val(),
+                education:$('#education').val(),
+                marriage:$('#marriage').val(),
+                age:$('#age').val(),
+                pay_1:$('#pay_1').val(),
+                pay_2:$('#pay_2').val(),
+                pay_3:$('#pay_3').val(),
+                pay_4:$('#pay_4').val(),
+                pay_5:$('#pay_5').val(),
+                pay_6:$('#pay_6').val(),
+                bill_amt1:$('#bill_amt1').val(),
+                bill_amt2:$('#bill_amt2').val(),
+                bill_amt3:$('#bill_amt3').val(),
+                bill_amt4:$('#bill_amt4').val(),
+                bill_amt5:$('#bill_amt5').val(),
+                bill_amt6:$('#bill_amt6').val(),
+                pay_amt1:$('#pay_amt1').val(),
+                pay_amt2:$('#pay_amt2').val(),
+                pay_amt3:$('#pay_amt3').val(),
+                pay_amt4:$('#pay_amt4').val(),
+                pay_amt5:$('#pay_amt5').val(),
+                pay_amt6:$('#pay_amt6').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("sx").innerHTML = json['sex']
+                document.getElementById("ed").innerHTML = json['education']
+                document.getElementById("mr").innerHTML = json['marriage']
+                document.getElementById("p1").innerHTML = json['pay_1']
+                document.getElementById("p2").innerHTML = json['pay_2']
+                document.getElementById("p3").innerHTML = json['pay_3']
+                document.getElementById("p4").innerHTML = json['pay_4']
+                document.getElementById("p5").innerHTML = json['pay_5']
+                document.getElementById("p6").innerHTML = json['pay_6']
+                document.getElementById("ba1").innerHTML = json['bill_amt1']
+                document.getElementById("ba2").innerHTML = json['bill_amt2']
+                document.getElementById("ba3").innerHTML = json['bill_amt3']
+                document.getElementById("ba4").innerHTML = json['bill_amt4']
+                document.getElementById("ba5").innerHTML = json['bill_amt5']
+                document.getElementById("ba6").innerHTML = json['bill_amt6']
+                document.getElementById("pa1").innerHTML = json['pay_amt1']
+                document.getElementById("pa2").innerHTML = json['pay_amt2']
+                document.getElementById("pa3").innerHTML = json['pay_amt3']
+                document.getElementById("pa4").innerHTML = json['pay_amt4']
+                document.getElementById("pa5").innerHTML = json['pay_amt5']
+                document.getElementById("pa6").innerHTML = json['pay_amt6']
+                document.getElementById("ag").innerHTML = json['age']
+                document.getElementById("lb").innerHTML = json['limit_bal']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
